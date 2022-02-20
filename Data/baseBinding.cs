@@ -90,7 +90,7 @@ namespace VRCHotkeyAssistant.Data
     public class IntBinding : BaseBinding
     {
         public IntBinding(string address) : base(address) { }
-        protected override keybindMode[] UsableBindModes => new[] { keybindMode.Disabled, keybindMode.IfGreater, keybindMode.IfLess, keybindMode.InRange, keybindMode.OutsideRange };
+        protected override keybindMode[] UsableBindModes => new[] { keybindMode.Disabled,keybindMode.ifEqual, keybindMode.ifNotEqual, keybindMode.IfGreater, keybindMode.IfLess, keybindMode.InRange, keybindMode.OutsideRange };
 
         public int MinValue { get => _minValue; set { if (_minValue != value) { _minValue = value; onPropertyChanged(nameof(MinValue)); wasTrue = false; } } }
         private int _minValue;
@@ -108,7 +108,9 @@ namespace VRCHotkeyAssistant.Data
                     (BindMode == keybindMode.IfGreater && result < MinValue) ||
                     (BindMode == keybindMode.IfLess && result > MinValue) ||
                     (BindMode == keybindMode.InRange && (result > MaxValue || result < MinValue)) ||
-                    BindMode == keybindMode.OutsideRange && result < MaxValue && result > MinValue){ 
+                    (BindMode == keybindMode.OutsideRange && result < MaxValue && result > MinValue) ||
+                    (BindMode == keybindMode.ifEqual && result != MinValue) ||
+                    (BindMode == keybindMode.ifNotEqual && result == MinValue)){ 
                     wasTrue = false; 
                     return; 
                 }
@@ -169,6 +171,8 @@ namespace VRCHotkeyAssistant.Data
         IfGreater,
         IfLess,
         InRange,
-        OutsideRange
+        OutsideRange,
+        ifEqual,
+        ifNotEqual
     }
 }
